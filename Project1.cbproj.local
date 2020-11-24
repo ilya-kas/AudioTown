@@ -1,0 +1,27 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<BorlandProject>
+	<Transactions>
+    <Transaction>1899.12.30 00:00:00.000.640,=D:\Projects\Лабы\Курсач по C++\bass\bass.lib</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.789,D:\Projects\Лабы\Курсач по C++\Unit1.h=D:\Projects\Лабы\c\Unit1.h</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.417,=D:\Projects\Проектики\AudioTown\bass\bass.lib</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.816,=D:\Projects\Лабы\Курсач по C++\bass\bass.dll</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.789,D:\Projects\Лабы\Курсач по C++\Unit1.dfm=D:\Projects\Лабы\c\Unit1.dfm</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.936,D:\Projects\Лабы\Курсач по C++\bass\bass.lib=</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.678,=D:\Projects\Лабы\c\Project1PCH1.h</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.205,=D:\Projects\Лабы\Курсач по C++\bass\bass.lib</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.293,D:\Projects\Лабы\Курсач по C++\bass\bass.lib=</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.858,D:\Projects\Лабы\Курсач по C++\bass\bass.lib=</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.825,=D:\Projects\Лабы\Курсач по C++\bass\bass.lib</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.743,=D:\Projects\Лабы\c\Unit1.cpp</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.010,D:\Projects\AudioTown\bass\bass.lib=</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.483,=D:\Projects\AudioTown\bass\bass.lib</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.210,D:\Projects\Лабы\Курсач по C++\Project1.cbproj=D:\Projects\Лабы\c\Project1.cbproj</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.946,=D:\Projects\Лабы\Курсач по C++\bass\bass.h</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.789,D:\Projects\Лабы\Курсач по C++\Unit1.cpp=D:\Projects\Лабы\c\Unit1.cpp</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.626,D:\Projects\Лабы\Курсач по C++\Project1PCH1.h=D:\Projects\Лабы\c\Project1PCH1.h</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.416,=D:\Projects\Лабы\Курсач по C++\bass\bass.h</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.612,D:\Projects\Лабы\Курсач по C++\bass\bass.h=</Transaction>
+    <Transaction>2020.11.23 21:28:56.470,D:\Projects\AudioTown\bass\bass.h=</Transaction>
+    <Transaction>2020.11.23 21:29:06.177,=D:\Projects\AudioTown\bass\bass.h</Transaction>
+  </Transactions>
+</BorlandProject>
