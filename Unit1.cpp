@@ -9,8 +9,8 @@
 #include "bass.h"
 //---------------------------------------------------------------------------
 #define debug
-#define min(a,b) (((a)<(b))?(a):(b))
-#define max(a,b) (((a)>(b))?(a):(b))
+#define MIN(a,b) (((a)<(b))?(a):(b))
+#define MAX(a,b) (((a)>(b))?(a):(b))
 
 #ifdef debug
 	FILE *logFile;
@@ -24,18 +24,28 @@ TForm1 *Form1;
 TPaintBox *lPaintBox;
 TPaintBox *rPaintBox;
 TScrollBar *scrollBar;
-int *lThread;
-int *rThread;
+
+short *lThread;
+short *rThread;
 int length;        //длина всей песни в отсчётах
 int visibleLength; //длина видимой части в отсчётах
 int leftPeak;
 int rightPeak;
 int leftSelected;
 int rightSelected;
+int cursor; //номер отсчёта, на котором курсор воспроизведения
+
+bool isSelecting = false;
+bool isMoving = false;
+int selectionStart;   //пиксель старта выделения
+int prevMoveX;      //пиксель предыдущего положения пыши при перетаскивании
+
 HSAMPLE sample;
 const int MAX_PEAK_VALUE = 32767;
 const int MIN_PEAKS = 10; //минимальное количество отсчётов, отображаемых на экране
-void drawThread(TPaintBox *paintBox, int peaks[]);
+
+void drawThread(TPaintBox *paintBox, short peaks[]);
+
 //---------------------------------------------------------------------------
 __fastcall TForm1::TForm1(TComponent* Owner)
 	: TForm(Owner){
@@ -56,19 +66,57 @@ int XToPeak(int x){
 	return leftPeak+x*peaksPerPixel;
 }
 //---------------------------------------------------------------------------
+String millisToString(int l){
+	String ans;
+	if (l/60000)
+		ans = l/60000;
+	else
+		ans = "0";
+	ans+=":";
+	l%=60000;
+	if (l/1000 > 9)
+		ans+=l/1000;
+	else
+		ans+="0"+(String (l/1000));
+	ans+=":";
+	l%=1000;
+	ans+= (l/100)?String(l/100):"0";
+	l%=100;
+	ans+= (l/10)?String(l/10):"0";
+	l%=10;
+	ans+= (l)?String(l):"0";
+	return ans;
+}
+//---------------------------------------------------------------------------
+void updateInfo(){
+	Form1->PLength->Caption = millisToString(length/44.1);
+	Form1->PPeaks->Caption = length;
+	Form1->PCursor->Caption = millisToString(cursor/44.1);
+	Form1->PSelLen->Caption = millisToString((rightSelected-leftSelected+1)/44.1);
+	Form1->PLeft->Caption = millisToString(leftPeak/44.1);
+	Form1->PRight->Caption = millisToString(rightPeak/44.1);
+}
+//---------------------------------------------------------------------------
 
 void __fastcall TForm1::FormCreate(TObject *Sender){
 	lPaintBox = LPaintBox;       //получаем ссылки на рамки для отрисовки каналов
 	rPaintBox = RPaintBox;
- 	scrollBar = ScrollBar;
-	BASS_Init(-1, 44100, 0, Handle, NULL);
+	scrollBar = ScrollBar;
+	if (HIWORD(BASS_GetVersion())!=BASSVERSION) {
+		Application->MessageBox(L"Ошибка версии BASS.", NULL, MB_OK);
+		exit(0);
+	}
+	if (!BASS_Init(-1, 44100, 0, Handle, NULL)) {
+		Application->MessageBox(L"Ошибка init BASS.", NULL, MB_OK);
+		exit(0);
+	}
 
-    length = 30000;
-	lThread = new int[length];
-	rThread = new int[length];
+    length = 1;
+	lThread = new short[length];
+	rThread = new short[length];
 	leftPeak = 0;
-	rightPeak = length;
-	visibleLength = length;
+	rightPeak = 0;
+	visibleLength = 1;
 	leftSelected = 0;
 	rightSelected = 0;
 	scrollBar->PageSize = (visibleLength*scrollBar->Max)/length;
@@ -78,7 +126,7 @@ void __fastcall TForm1::FormCreate(TObject *Sender){
 }
 //---------------------------------------------------------------------------
 
-void drawThread(TPaintBox *paintBox, int peaks[]){
+void drawThread(TPaintBox *paintBox, short peaks[]){
 	paintBox->Canvas->Pen->Color = clBlack;      //заполняем фон чёрным цветом
 	paintBox->Canvas->Brush->Color = clBlack;
 	paintBox->Canvas->Rectangle(0,0,paintBox->Width,paintBox->Height);
@@ -92,40 +140,38 @@ void drawThread(TPaintBox *paintBox, int peaks[]){
 	paintBox->Canvas->Brush->Color = clSilver;
 	paintBox->Canvas->Rectangle(peakToX(leftSelected),0,peakToX(rightSelected),paintBox->Height);
 
+	paintBox->Canvas->MoveTo(0,start);
 	if (visibleLength>0) {
 		paintBox->Canvas->Pen->Color = clLime;
 		paintBox->Canvas->Pen->Width = 2;
-		int sumPos;
-		int sumNeg;
-		int lBorder = max(leftPeak,leftSelected);
-		lBorder = min(lBorder,rightPeak);
-		int rBorder = min(rightPeak,rightSelected);
-		rBorder = max(rBorder,leftPeak);
+		int max;
+		int min;
+		int lBorder = MAX(leftPeak,leftSelected);
+		lBorder = MIN(lBorder,rightPeak);
+		int rBorder = MIN(rightPeak,rightSelected);
+		rBorder = MAX(rBorder,leftPeak);
 		if (peaksPerPixel>1) {
 			float p = leftPeak; //номер отсчёта, с которого следующий пиксель
 			int hPos;
 			int hNeg;
-			int count; //отсчётов в данном пикселе
 			float next; //номер отсчёта, до которого идёт этот пиксель
 			for (int i=0; i < peakToX(lBorder); i++) {
-				sumPos = 0;      //разделение на положительные и отрицательные
-				sumNeg = 0;
-				count = 0;
+				max = -MAX_PEAK_VALUE;
+				min = MAX_PEAK_VALUE;
 				next = p+peaksPerPixel;
 				for (int j = floorf(p); j < next; j++) {
-					if (peaks[j]>0)
-						sumPos-=peaks[j];
-					if (peaks[j]<0)
-						sumNeg-=peaks[j];
-					count++;
+					if (peaks[j]>max)
+						max = peaks[j];
+					if (peaks[j]<min)
+						min = peaks[j];
 				}
-				hPos = sumPos / count;   //высота "столбиков"
-				hNeg = sumNeg / count;   //значения знаков наоборот
+				hPos = -max;   //высота "столбиков"
+				hNeg = -min;   //значения знаков наоборот
 
 				hPos = hPos * height/2 / MAX_PEAK_VALUE;
 				hNeg = hNeg * height/2 / MAX_PEAK_VALUE;
 
-				paintBox->Canvas->MoveTo(i,start+hPos);
+				paintBox->Canvas->LineTo(i,start+hPos);
 				paintBox->Canvas->LineTo(i,start+hNeg);
 #ifdef debug
  //		fprintf(logFile, "%d %f\n",sumPos,(floor(p+peaksPerPixel)-floor(p)));
@@ -134,24 +180,22 @@ void drawThread(TPaintBox *paintBox, int peaks[]){
 			}
 			paintBox->Canvas->Pen->Color = clGreen;                   //это отрисовка выделенной части
 			for (int i=peakToX(lBorder); i < peakToX(rBorder); i++) {
-				sumPos = 0;
-				sumNeg = 0;
-				count = 0;
+				max = -MAX_PEAK_VALUE;
+				min = MAX_PEAK_VALUE;
 				next = p+peaksPerPixel;
 				for (int j = floorf(p); j < next; j++) {
-					if (peaks[j]>0)
-						sumPos-=peaks[j];
-					if (peaks[j]<0)
-						sumNeg-=peaks[j];
-					count++;
+					if (peaks[j]>max)
+						max = peaks[j];
+					if (peaks[j]<min)
+						min = peaks[j];
 				}
-				hPos = sumPos / count;
-				hNeg = sumNeg / count;
+				hPos = -max;   //высота "столбиков"
+				hNeg = -min;   //значения знаков наоборот
 
 				hPos = hPos * height/2 / MAX_PEAK_VALUE;
 				hNeg = hNeg * height/2 / MAX_PEAK_VALUE;
 
-				paintBox->Canvas->MoveTo(i,start+hPos);
+				paintBox->Canvas->LineTo(i,start+hPos);
 				paintBox->Canvas->LineTo(i,start+hNeg);
 #ifdef debug
 //		fprintf(logFile, "%d %f\n",sumPos,(floor(p+peaksPerPixel)-floor(p)));
@@ -161,24 +205,22 @@ void drawThread(TPaintBox *paintBox, int peaks[]){
 			}
             paintBox->Canvas->Pen->Color = clLime;
 			for (int i=peakToX(rBorder); i <= width; i++) {     //если осталось, то правое лаймовым цветом
-				sumPos = 0;
-				sumNeg = 0;
-				count = 0;
+				max = -MAX_PEAK_VALUE;
+				min = MAX_PEAK_VALUE;
 				next = p+peaksPerPixel;
 				for (int j = floorf(p); j < next; j++) {
-					if (peaks[j]>0)
-						sumPos-=peaks[j];
-					if (peaks[j]<0)
-						sumNeg-=peaks[j];
-					count++;
+					if (peaks[j]>max)
+						max = peaks[j];
+					if (peaks[j]<min)
+						min = peaks[j];
 				}
-				hPos = sumPos / count;
-				hNeg = sumNeg / count;
+				hPos = -max;   //высота "столбиков"
+				hNeg = -min;   //значения знаков наоборот
 
 				hPos = hPos * height/2 / MAX_PEAK_VALUE;
 				hNeg = hNeg * height/2 / MAX_PEAK_VALUE;
 
-				paintBox->Canvas->MoveTo(i,start+hPos);
+				paintBox->Canvas->LineTo(i,start+hPos);
 				paintBox->Canvas->LineTo(i,start+hNeg);
 #ifdef debug
 //		fprintf(logFile, "%d %f\n",sumPos,(floor(p+peaksPerPixel)-floor(p)));
@@ -260,6 +302,7 @@ void __fastcall TForm1::FormMouseWheel(TObject *Sender, TShiftState Shift, int W
 		leftPeak = rightPeak-newLength+1;
 	}
 	visibleLength = newLength;
+	updateInfo();
 
 	float Max = scrollBar->Max;
 	scrollBar->PageSize = round((visibleLength*Max)/length);
@@ -269,17 +312,22 @@ void __fastcall TForm1::FormMouseWheel(TObject *Sender, TShiftState Shift, int W
 }
 //---------------------------------------------------------------------------
 
-bool isSelecting = false;
-int selectionStart;
-
 void __fastcall TForm1::RPaintBoxMouseDown(TObject *Sender, TMouseButton Button, TShiftState Shift,
 		  int X, int Y){
-	isSelecting = true;
-	selectionStart = X;
-	leftSelected = XToPeak(X);
-	rightSelected = XToPeak(X+1)-1;
-	drawThread(LPaintBox, lThread);     //отрисовка каналов
-	drawThread(RPaintBox, rThread);
+	if (Button == mbLeft) {
+		isSelecting = true;
+		selectionStart = X;
+		leftSelected = XToPeak(X);
+		rightSelected = XToPeak(X+1)-1;
+
+		updateInfo();
+		drawThread(LPaintBox, lThread);     //отрисовка каналов
+		drawThread(RPaintBox, rThread);
+	}
+	if (Button == mbMiddle) {
+		isMoving = true;
+		prevMoveX = X;
+	}
 }
 //---------------------------------------------------------------------------
 
@@ -292,7 +340,29 @@ void __fastcall TForm1::RPaintBoxMouseMove(TObject *Sender, TShiftState Shift, i
 		}else{
 			leftSelected = XToPeak(X);
 			rightSelected = XToPeak(selectionStart+1)-1;
-        }
+		}
+
+		updateInfo();
+		drawThread(LPaintBox, lThread);     //отрисовка каналов
+		drawThread(RPaintBox, rThread);
+	}
+	if (isMoving) {
+		int delta = prevMoveX-X;
+		prevMoveX = X;
+		float width = lPaintBox->Width;
+		float peaksPerPixel = visibleLength/width;
+		leftPeak += delta * peaksPerPixel;
+		if (leftPeak<0) {
+			leftPeak = 0;
+		}
+		rightPeak = leftPeak + visibleLength-1;
+		if (rightPeak>=length) {
+			rightPeak = length-1;
+			leftPeak = rightPeak-visibleLength+1;
+		}
+		scrollBar->Position = round(((leftPeak+rightPeak)*100)/2/length) - scrollBar->PageSize/2;
+
+		updateInfo();
 		drawThread(LPaintBox, lThread);     //отрисовка каналов
 		drawThread(RPaintBox, rThread);
 	}
@@ -302,6 +372,7 @@ void __fastcall TForm1::RPaintBoxMouseMove(TObject *Sender, TShiftState Shift, i
 void __fastcall TForm1::RPaintBoxMouseUp(TObject *Sender, TMouseButton Button, TShiftState Shift,
 		  int X, int Y){
 	isSelecting = false;
+	isMoving = false;
 }
 //---------------------------------------------------------------------------
 
@@ -322,26 +393,32 @@ void __fastcall TForm1::ScrollBarScroll(TObject *Sender, TScrollCode ScrollCode,
    //	fprintf(logFile, "%d %d\n",ScrollPos,scrollBar->PageSize);
 #endif
 
+	updateInfo();
 	drawThread(LPaintBox, lThread);     //отрисовка каналов
 	drawThread(RPaintBox, rThread);
 }
 //---------------------------------------------------------------------------
 
-
-void __fastcall TForm1::SpeedButton1Click(TObject *Sender){
+void __fastcall TForm1::LoadButtonClick(TObject *Sender){
  /*mydecoder := BASS_StreamCreateFile(false,PChar(OpenDialog1.FileName),0,0,BASS_STREAM_DECODE);
  mychannel:=bass_samplegetchannel(mysample,true);*/
 
 	if (!(OpenDialog->Execute()))
 		return;
 
-	String *filePath = new String(OpenDialog->FileName);
-	sample = BASS_SampleLoad(false,filePath,0,0,1,BASS_STREAM_PRESCAN);
-	BASS_SAMPLE* info;
-	BASS_SampleGetInfo(sample,info);
-	length = info->length/4;
-	lThread = new int[length];
-	rThread = new int[length];
+	sample = BASS_SampleLoad(false, OpenDialog->FileName.c_str(),0,0,2,BASS_STREAM_PRESCAN);
+	if (!sample) {
+		Application->MessageBox(L"Ошибка загрузки песни.", NULL,MB_OK);
+		PPeaks->Caption = BASS_ErrorGetCode();
+		return;
+	}
+	BASS_SAMPLE info;
+	if (!BASS_SampleGetInfo(sample, &info))
+	  return;
+	DWORD l = info.length;
+	length = l/4;
+	lThread = new short[length];
+	rThread = new short[length];
 	leftPeak = 0;
 	rightPeak = length;
 	visibleLength = length;
@@ -349,15 +426,58 @@ void __fastcall TForm1::SpeedButton1Click(TObject *Sender){
 	rightSelected = 0;
 
 	DWORD* buff = new DWORD[length];
-	BASS_SampleGetData(sample, buff);
+    PLength->Caption = length;
+	if (!BASS_SampleGetData(sample, buff))
+	  return;
 	for (int i=0; i < length; i++) {
 		lThread[i] = LOWORD(buff[i]);
 		rThread[i] = HIWORD(buff[i]);
 	}
 	scrollBar->PageSize = (visibleLength*scrollBar->Max)/length;
 
+	updateInfo();
 	drawThread(LPaintBox, lThread);     //отрисовка каналов
 	drawThread(RPaintBox, rThread);
+}
+//---------------------------------------------------------------------------
+
+
+void __fastcall TForm1::FormKeyDown(TObject *Sender, WORD &Key, TShiftState Shift){
+	if (visibleLength==0)
+        return;
+	if (Key==VK_DELETE) {
+
+	}
+	if (Key==VK_UP) {
+		for (int i=leftSelected; i <= rightSelected; i++) {
+			if (lThread[i]*1.2>MAX_PEAK_VALUE)
+				lThread[i] = MAX_PEAK_VALUE;
+			else
+				if (lThread[i]*1.2<-MAX_PEAK_VALUE)
+					lThread[i] = -MAX_PEAK_VALUE;
+				else
+					lThread[i] *= 1.2;
+			if (rThread[i]*1.2>MAX_PEAK_VALUE)
+				rThread[i] = MAX_PEAK_VALUE;
+			else
+				if (rThread[i]*1.2<-MAX_PEAK_VALUE)
+					rThread[i] = -MAX_PEAK_VALUE;
+				else
+					rThread[i] *= 1.2;
+		}
+
+		drawThread(LPaintBox, lThread);     //отрисовка каналов
+		drawThread(RPaintBox, rThread);
+	}
+	if (Key==VK_DOWN) {
+        for (int i=leftSelected; i <= rightSelected; i++) {
+			lThread[i] *= 0.8;
+			rThread[i] *= 0.8;
+		}
+
+		drawThread(LPaintBox, lThread);     //отрисовка каналов
+		drawThread(RPaintBox, rThread);
+	}
 }
 //---------------------------------------------------------------------------
 

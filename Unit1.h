@@ -32,8 +32,7 @@ __published:	// IDE-managed Components
 	TPaintBox *LPaintBox;
 	TPaintBox *RPaintBox;
 	TScrollBar *ScrollBar;
-	TSpeedButton *SpeedButton1;
-	TSpeedButton *SpeedButton2;
+	TSpeedButton *SaveButton;
 	TOpenDialog *OpenDialog;
 	void __fastcall FormCreate(TObject *Sender);
 	void __fastcall LPaintBoxPaint(TObject *Sender);
@@ -47,7 +46,8 @@ __published:	// IDE-managed Components
 	void __fastcall RPaintBoxMouseUp(TObject *Sender, TMouseButton Button, TShiftState Shift,
 		  int X, int Y);
 	void __fastcall ScrollBarScroll(TObject *Sender, TScrollCode ScrollCode, int &ScrollPos);
-	void __fastcall SpeedButton1Click(TObject *Sender);
+	void __fastcall LoadButtonClick(TObject *Sender);
+	void __fastcall FormKeyDown(TObject *Sender, WORD &Key, TShiftState Shift);
 
 
 private:	// User declarations

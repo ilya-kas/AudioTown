@@ -13,6 +13,7 @@ object Form1: TForm1
   OldCreateOrder = False
   OnCreate = FormCreate
   OnDestroy = FormDestroy
+  OnKeyDown = FormKeyDown
   OnMouseWheel = FormMouseWheel
   PixelsPerInch = 96
   TextHeight = 13
@@ -517,7 +518,7 @@ object Form1: TForm1
     OnMouseUp = RPaintBoxMouseUp
     OnPaint = RPaintBoxPaint
   end
-  object SpeedButton1: TSpeedButton
+  object LoadButton: TSpeedButton
     Left = 194
     Top = 419
     Width = 127
@@ -529,9 +530,9 @@ object Form1: TForm1
     Font.Name = 'Times New Roman'
     Font.Style = []
     ParentFont = False
-    OnClick = SpeedButton1Click
+    OnClick = LoadButtonClick
   end
-  object SpeedButton2: TSpeedButton
+  object SaveButton: TSpeedButton
     Left = 194
     Top = 469
     Width = 127
@@ -587,7 +588,7 @@ object Form1: TForm1
     Height = 30
     BevelInner = bvLowered
     BevelOuter = bvLowered
-    Caption = '0:00:00'
+    Caption = '0:00:000'
     Color = clWindow
     Font.Charset = DEFAULT_CHARSET
     Font.Color = clWindowText
@@ -600,7 +601,7 @@ object Form1: TForm1
   end
   object PPeaks: TPanel
     Left = 504
-    Top = 479
+    Top = 478
     Width = 87
     Height = 30
     BevelInner = bvLowered
@@ -659,7 +660,7 @@ object Form1: TForm1
     Height = 30
     BevelInner = bvLowered
     BevelOuter = bvLowered
-    Caption = '0:00:00'
+    Caption = '0:00:000'
     Color = clWindow
     Font.Charset = DEFAULT_CHARSET
     Font.Color = clWindowText
@@ -677,7 +678,7 @@ object Form1: TForm1
     Height = 30
     BevelInner = bvLowered
     BevelOuter = bvLowered
-    Caption = '0:00:00'
+    Caption = '0:00:000'
     Color = clWindow
     Font.Charset = DEFAULT_CHARSET
     Font.Color = clWindowText
@@ -731,7 +732,7 @@ object Form1: TForm1
     Height = 30
     BevelInner = bvLowered
     BevelOuter = bvLowered
-    Caption = '0:00:00'
+    Caption = '0:00:000'
     Color = clWindow
     Font.Charset = DEFAULT_CHARSET
     Font.Color = clWindowText
@@ -749,7 +750,7 @@ object Form1: TForm1
     Height = 30
     BevelInner = bvLowered
     BevelOuter = bvLowered
-    Caption = '0:00:00'
+    Caption = '0:00:000'
     Color = clWindow
     Font.Charset = DEFAULT_CHARSET
     Font.Color = clWindowText
@@ -773,7 +774,7 @@ object Form1: TForm1
   end
   object OpenDialog: TOpenDialog
     Filter = 'audio (*.mp3; *.ogg; *.wav)|*.mp3; *.ogg; *.wav'
-    Left = 952
-    Top = 408
+    Left = 960
+    Top = 400
   end
 end
