@@ -31,9 +31,12 @@ __published:	// IDE-managed Components
 	TPanel *PRight;
 	TPaintBox *LPaintBox;
 	TPaintBox *RPaintBox;
-	TScrollBar *ScrollBar;
 	TSpeedButton *SaveButton;
 	TOpenDialog *OpenDialog;
+	TPanel *ScrollerContainer;
+	TPanel *Scroll;
+	TTimer *Timer;
+	TSaveDialog *SaveDialog;
 	void __fastcall FormCreate(TObject *Sender);
 	void __fastcall LPaintBoxPaint(TObject *Sender);
 	void __fastcall RPaintBoxPaint(TObject *Sender);
@@ -45,10 +48,18 @@ __published:	// IDE-managed Components
 	void __fastcall RPaintBoxMouseMove(TObject *Sender, TShiftState Shift, int X, int Y);
 	void __fastcall RPaintBoxMouseUp(TObject *Sender, TMouseButton Button, TShiftState Shift,
 		  int X, int Y);
-	void __fastcall ScrollBarScroll(TObject *Sender, TScrollCode ScrollCode, int &ScrollPos);
 	void __fastcall LoadButtonClick(TObject *Sender);
 	void __fastcall FormKeyDown(TObject *Sender, WORD &Key, TShiftState Shift);
-
+	void __fastcall ScrollMouseDown(TObject *Sender, TMouseButton Button, TShiftState Shift,
+          int X, int Y);
+	void __fastcall ScrollMouseMove(TObject *Sender, TShiftState Shift, int X, int Y);
+	void __fastcall ScrollMouseUp(TObject *Sender, TMouseButton Button, TShiftState Shift,
+		  int X, int Y);
+	void __fastcall PlayButtonClick(TObject *Sender);
+	void __fastcall TimerTimer(TObject *Sender);
+	void __fastcall StopButtonClick(TObject *Sender);
+	void __fastcall PauseButtonClick(TObject *Sender);
+	void __fastcall SaveButtonClick(TObject *Sender);
 
 private:	// User declarations
 public:		// User declarations

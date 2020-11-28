@@ -1,34 +1,53 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <BorlandProject>
 	<Transactions>
-    <Transaction>1899.12.30 00:00:00.000.417,=D:\Projects\Проектики\AudioTown\bass\bass.lib</Transaction>
-    <Transaction>1899.12.30 00:00:00.000.789,D:\Projects\Лабы\Курсач по C++\Unit1.h=D:\Projects\Лабы\c\Unit1.h</Transaction>
-    <Transaction>1899.12.30 00:00:00.000.640,=D:\Projects\Лабы\Курсач по C++\bass\bass.lib</Transaction>
-    <Transaction>1899.12.30 00:00:00.000.789,D:\Projects\Лабы\Курсач по C++\Unit1.cpp=D:\Projects\Лабы\c\Unit1.cpp</Transaction>
     <Transaction>1899.12.30 00:00:00.000.789,D:\Projects\Лабы\Курсач по C++\Unit1.dfm=D:\Projects\Лабы\c\Unit1.dfm</Transaction>
     <Transaction>1899.12.30 00:00:00.000.816,=D:\Projects\Лабы\Курсач по C++\bass\bass.dll</Transaction>
-    <Transaction>1899.12.30 00:00:00.000.293,D:\Projects\Лабы\Курсач по C++\bass\bass.lib=</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.417,=D:\Projects\Проектики\AudioTown\bass\bass.lib</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.789,D:\Projects\Лабы\Курсач по C++\Unit1.cpp=D:\Projects\Лабы\c\Unit1.cpp</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.416,=D:\Projects\Лабы\Курсач по C++\bass\bass.h</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.612,D:\Projects\Лабы\Курсач по C++\bass\bass.h=</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.626,D:\Projects\Лабы\Курсач по C++\Project1PCH1.h=D:\Projects\Лабы\c\Project1PCH1.h</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.789,D:\Projects\Лабы\Курсач по C++\Unit1.h=D:\Projects\Лабы\c\Unit1.h</Transaction>
     <Transaction>1899.12.30 00:00:00.000.205,=D:\Projects\Лабы\Курсач по C++\bass\bass.lib</Transaction>
-    <Transaction>1899.12.30 00:00:00.000.678,=D:\Projects\Лабы\c\Project1PCH1.h</Transaction>
     <Transaction>1899.12.30 00:00:00.000.936,D:\Projects\Лабы\Курсач по C++\bass\bass.lib=</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.678,=D:\Projects\Лабы\c\Project1PCH1.h</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.293,D:\Projects\Лабы\Курсач по C++\bass\bass.lib=</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.640,=D:\Projects\Лабы\Курсач по C++\bass\bass.lib</Transaction>
     <Transaction>1899.12.30 00:00:00.000.825,=D:\Projects\Лабы\Курсач по C++\bass\bass.lib</Transaction>
     <Transaction>1899.12.30 00:00:00.000.858,D:\Projects\Лабы\Курсач по C++\bass\bass.lib=</Transaction>
-    <Transaction>1899.12.30 00:00:00.000.743,=D:\Projects\Лабы\c\Unit1.cpp</Transaction>
-    <Transaction>1899.12.30 00:00:00.000.210,D:\Projects\Лабы\Курсач по C++\Project1.cbproj=D:\Projects\Лабы\c\Project1.cbproj</Transaction>
-    <Transaction>1899.12.30 00:00:00.000.010,D:\Projects\AudioTown\bass\bass.lib=</Transaction>
-    <Transaction>1899.12.30 00:00:00.000.483,=D:\Projects\AudioTown\bass\bass.lib</Transaction>
-    <Transaction>1899.12.30 00:00:00.000.416,=D:\Projects\Лабы\Курсач по C++\bass\bass.h</Transaction>
-    <Transaction>1899.12.30 00:00:00.000.626,D:\Projects\Лабы\Курсач по C++\Project1PCH1.h=D:\Projects\Лабы\c\Project1PCH1.h</Transaction>
-    <Transaction>1899.12.30 00:00:00.000.612,D:\Projects\Лабы\Курсач по C++\bass\bass.h=</Transaction>
     <Transaction>1899.12.30 00:00:00.000.946,=D:\Projects\Лабы\Курсач по C++\bass\bass.h</Transaction>
-    <Transaction>2020.11.23 21:28:56.470,D:\Projects\AudioTown\bass\bass.h=</Transaction>
-    <Transaction>2020.11.23 21:29:06.177,=D:\Projects\AudioTown\bass\bass.h</Transaction>
-    <Transaction>2020.11.24 13:26:02.840,D:\Projects\AudioTown\bass\bass.h=</Transaction>
-    <Transaction>2020.11.24 13:26:09.660,=D:\Projects\AudioTown\bass\bass.h</Transaction>
-  </Transactions>  <ProjectSortOrder AutoSort="0" SortType="0">
+    <Transaction>1899.12.30 00:00:00.000.743,=D:\Projects\Лабы\c\Unit1.cpp</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.010,D:\Projects\AudioTown\bass\bass.lib=</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.840,D:\Projects\AudioTown\bass\bass.h=</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.210,D:\Projects\Лабы\Курсач по C++\Project1.cbproj=D:\Projects\Лабы\c\Project1.cbproj</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.177,=D:\Projects\AudioTown\bass\bass.h</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.470,D:\Projects\AudioTown\bass\bass.h=</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.660,=D:\Projects\AudioTown\bass\bass.h</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.483,=D:\Projects\AudioTown\bass\bass.lib</Transaction>
+    <Transaction>2020.11.27 14:35:34.215,=D:\Projects\AudioTown\bass\bassenc_mp3.h</Transaction>
+    <Transaction>2020.11.27 14:44:47.336,=D:\Projects\AudioTown\bass\bassenc_mp3.dll</Transaction>
+    <Transaction>2020.11.27 14:45:29.357,=D:\Projects\AudioTown\bass\bassenc.h</Transaction>
+    <Transaction>2020.11.27 14:45:35.437,=D:\Projects\AudioTown\bass\bassenc_mp3.lib</Transaction>
+    <Transaction>2020.11.27 14:45:41.958,=D:\Projects\AudioTown\bass\bassenc.lib</Transaction>
+    <Transaction>2020.11.27 14:45:54.813,=D:\Projects\AudioTown\bass\bassenc.dll</Transaction>
+    <Transaction>2020.11.27 14:47:32.715,D:\Projects\AudioTown\bass\bassenc.lib=</Transaction>
+    <Transaction>2020.11.27 14:47:49.922,D:\Projects\AudioTown\bass\bassenc_mp3.lib=</Transaction>
+    <Transaction>2020.11.27 14:49:27.717,=D:\Projects\AudioTown\bass\bassenc.lib</Transaction>
+    <Transaction>2020.11.27 14:49:32.520,=D:\Projects\AudioTown\bass\bassenc_mp3.lib</Transaction>
+    <Transaction>2020.11.27 14:50:33.282,D:\Projects\AudioTown\bass\bassenc_mp3.dll=</Transaction>
+    <Transaction>2020.11.27 14:50:40.121,=D:\Projects\AudioTown\bass\BASSENC_MP3.dll</Transaction>
+  </Transactions>
+	<ProjectSortOrder AutoSort="0" SortType="0">
     <File Path="bass"/>
     <File Path="bass\bass.dll"/>
     <File Path="bass\bass.h"/>
+    <File Path="bass\bassenc.dll"/>
+    <File Path="bass\bassenc.h"/>
+    <File Path="bass\bassenc.lib"/>
+    <File Path="bass\BASSENC_MP3.dll"/>
+    <File Path="bass\bassenc_mp3.h"/>
+    <File Path="bass\bassenc_mp3.lib"/>
     <File Path="bass\bass.lib"/>
     <File Path="Project1.cpp"/>
     <File Path="Project1PCH1.h"/>

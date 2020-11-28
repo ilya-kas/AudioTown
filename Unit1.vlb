@@ -22,10 +22,6 @@ Coordinates=10,78,62,58
 [PRight]
 Coordinates=103,10,53,58
 
-[ScrollBar]
-Coordinates=10,220,67,36
-Visible=True
-
 [PLength]
 Coordinates=82,78,62,58
 
@@ -54,5 +50,6 @@ Coordinates=194,146,77,36
 Coordinates=213,78,112,58
 
 []
-Coordinates=458,56,91,36
+Coordinates=10,220,67,36
+Visible=True
 

@@ -1,9 +1,10 @@
 object Form1: TForm1
   Left = 0
   Top = 0
+  BorderStyle = bsSingle
   Caption = 'Form1'
-  ClientHeight = 530
-  ClientWidth = 998
+  ClientHeight = 540
+  ClientWidth = 996
   Color = clMenu
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
@@ -175,6 +176,7 @@ object Form1: TForm1
       FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
       FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
       FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF}
+    OnClick = PlayButtonClick
   end
   object PauseButton: TSpeedButton
     Left = 128
@@ -334,6 +336,7 @@ object Form1: TForm1
       FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
       FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
       FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF}
+    OnClick = PauseButtonClick
   end
   object StopButton: TSpeedButton
     Left = 26
@@ -493,6 +496,7 @@ object Form1: TForm1
       FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
       FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
       FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF}
+    OnClick = StopButtonClick
   end
   object LPaintBox: TPaintBox
     Left = 8
@@ -544,6 +548,7 @@ object Form1: TForm1
     Font.Name = 'Times New Roman'
     Font.Style = []
     ParentFont = False
+    OnClick = SaveButtonClick
   end
   object LengthPanel: TPanel
     Left = 416
@@ -761,20 +766,49 @@ object Form1: TForm1
     ParentFont = False
     TabOrder = 11
   end
-  object ScrollBar: TScrollBar
+  object ScrollerContainer: TPanel
     Left = 8
-    Top = 192
+    Top = 191
     Width = 977
-    Height = 17
-    DoubleBuffered = False
-    PageSize = 0
-    ParentDoubleBuffered = False
+    Height = 25
+    BevelOuter = bvLowered
+    Color = clWhite
+    ParentBackground = False
     TabOrder = 12
-    OnScroll = ScrollBarScroll
+    object Scroll: TPanel
+      Left = 217
+      Top = 2
+      Width = 481
+      Height = 21
+      BevelOuter = bvNone
+      Color = clBtnShadow
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -11
+      Font.Name = 'Tahoma'
+      Font.Style = []
+      ParentBackground = False
+      ParentFont = False
+      TabOrder = 0
+      OnMouseDown = ScrollMouseDown
+      OnMouseMove = ScrollMouseMove
+      OnMouseUp = ScrollMouseUp
+    end
   end
   object OpenDialog: TOpenDialog
     Filter = 'audio (*.mp3; *.ogg; *.wav)|*.mp3; *.ogg; *.wav'
-    Left = 960
-    Top = 400
+    Left = 888
+    Top = 408
+  end
+  object Timer: TTimer
+    Enabled = False
+    Interval = 10
+    OnTimer = TimerTimer
+    Left = 856
+    Top = 408
+  end
+  object SaveDialog: TSaveDialog
+    Left = 920
+    Top = 408
   end
 end
